@@ -71,6 +71,7 @@ void PrimitiveFieldGenerator::GenerateMembers(Writer* writer) {
   AddPublicMemberAttributes(writer);
   writer->WriteLine("public $0$ $1$ {", type_name(), property_name());
   writer->WriteLine("  get { return $0$_; }", name());
+  writer->WriteLine("  set { $0$_ = value; }", name()); // MEMO: パブリックに読み書き可能に by harada@toydea.com
   writer->WriteLine("}");
 }
 

@@ -182,8 +182,10 @@ void UmbrellaClassGenerator::WriteExtensionRegistration(Writer* writer) {
 }
 
 void UmbrellaClassGenerator::WriteDescriptor(Writer* writer) {
+	// MEMO: リフレクションを使うので排除 by harada@toydea.com
+#if 0
   writer->WriteLine("#region Descriptor");
-
+  
   writer->WriteLine("public static pbd::FileDescriptor Descriptor {");
   writer->WriteLine("  get { return descriptor; }");
   writer->WriteLine("}");
@@ -252,6 +254,7 @@ void UmbrellaClassGenerator::WriteDescriptor(Writer* writer) {
   writer->WriteLine("}");
   writer->WriteLine("#endregion");
   writer->WriteLine();
+#endif
 }
 
 void UmbrellaClassGenerator::WriteLiteExtensions(Writer* writer) {

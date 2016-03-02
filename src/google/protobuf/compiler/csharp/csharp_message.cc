@@ -181,7 +181,11 @@ void MessageGenerator::Generate(Writer* writer) {
       descriptor_->extension_range_count() > 0 ? "Extendable" : "Generated",
       runtime_suffix());
   writer->Indent();
+#if 0
   writer->WriteLine("private $0$() { }", class_name());  // Private ctor.
+#else
+  writer->WriteLine("public $0$() { }", class_name());  // Private ctor. MEMO: コンストラクタをpublicに harada@toydea.com
+#endif
   // Must call MakeReadOnly() to make sure all lists are made read-only
   writer->WriteLine(
       "private static readonly $0$ defaultInstance = new $0$().MakeReadOnly();",
@@ -286,6 +290,8 @@ void MessageGenerator::Generate(Writer* writer) {
   GenerateParseFromMethods(writer);
   GenerateBuilder(writer);
 
+  // MEMO: リフレクションを使うので排除
+#if 0
   // Force the static initialization code for the file to run, since it may
   // initialize static variables declared in this class.
   writer->WriteLine("static $0$() {", class_name());
@@ -296,11 +302,11 @@ void MessageGenerator::Generate(Writer* writer) {
   writer->WriteLine("  object.ReferenceEquals($0$.Descriptor, null);",
                     GetFullUmbrellaClassName(descriptor_->file()));
   writer->WriteLine("}");
+#endif
 
   writer->Outdent();
   writer->WriteLine("}");
   writer->WriteLine();
-
 }
 
 void MessageGenerator::GenerateLiteRuntimeMethods(Writer* writer) {
@@ -608,7 +614,11 @@ void MessageGenerator::GenerateCommonBuilderMethods(Writer* writer) {
   writer->WriteLine("}");
   writer->WriteLine();
   writer->WriteLine("public override bool IsInitialized {");
+#if 0
   writer->WriteLine("  get { return result.IsInitialized; }");
+#else
+  writer->WriteLine("  get { return true; }"); // MEMO: リフレクションを使わないように変更 harada@toydea.com
+#endif
   writer->WriteLine("}");
   writer->WriteLine();
   writer->WriteLine("protected override $0$ MessageBeingBuilt {", class_name());
